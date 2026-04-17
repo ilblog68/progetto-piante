@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostica Botanica AI</title>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --background-color: #f5f5f5;
+            --surface-color: #ffffff;
+            --text-color: #333333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-top: 0;
+        }
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            border: 2px dashed var(--primary-color);
+            display: inline-block;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 4px;
+            color: var(--primary-color);
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .custom-file-upload:hover {
+            background-color: #e8f5e9;
+        }
+        #image-preview {
+            max-width: 100%;
+            margin-top: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1b5e20;
+        }
+        button:disabled {
+            background-color: #9e9e9e;
+            cursor: not-allowed;
+        }
+        .results-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+            display: none;
+        }
+        .result-item {
+            margin-bottom: 15px;
+        }
+        .result-label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Diagnostica Botanica AI</h1>
+    
+    <div class="upload-section">
+        <label for="file-upload" class="custom-file-upload">
+            Scatta o Carica una Foto
+        </label>
+        <input id="file-upload" type="file" accept="image/*" capture="environment" />
+        <img id="image-preview" alt="Anteprima della pianta" />
+    </div>
+
+    <button id="analyze-btn" disabled>Analizza Pianta</button>
+    <div class="loader" id="loader"></div>
+
+    <div class="results-section" id="results">
+        <div class="result-item">
+            <div class="result-label">Identificazione Pianta:</div>
+            <div id="plant-name">-</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">Diagnosi:</div>
+            <div id="plant-diagnosis">-</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">Rimedi Suggeriti:</div>
+            <div id="plant-remedies">-</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fileUpload = document.getElementById('file-upload');
+    const imagePreview = document.getElementById('image-preview');
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const loader = document.getElementById('loader');
+    const resultsSection = document.getElementById('results');
+
+    // Elementi dei risultati
+    const plantName = document.getElementById('plant-name');
+    const plantDiagnosis = document.getElementById('plant-diagnosis');
+    const plantRemedies = document.getElementById('plant-remedies');
+
+    let currentFile = null;
+
+    fileUpload.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            currentFile = file;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                analyzeBtn.disabled = false;
+                resultsSection.style.display = 'none';
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    });
+
+    analyzeBtn.addEventListener('click', function() {
+        if (!currentFile) return;
+
+        // Mostra il loader e nasconde i risultati precedenti
+        loader.style.display = 'block';
+        resultsSection.style.display = 'none';
+        analyzeBtn.disabled = true;
+
+        /* 
+         * ATTENZIONE: Qui è necessario implementare la chiamata API reale.
+         * Esempio di implementazione con Plant.id o servizio simile:
+         * 
+         * const formData = new FormData();
+         * formData.append('images', currentFile);
+         * 
+         * fetch('URL_DELL_API', {
+         *     method: 'POST',
+         *     headers: { 'Api-Key': 'LA_TUA_CHIAVE_API' },
+         *     body: formData
+         * })
+         * .then(response => response.json())
+         * .then(data => { ... aggiorna il DOM ... })
+         */
+
+        // Simulazione di una chiamata API (Rimuovere in produzione)
+        setTimeout(() => {
+            loader.style.display = 'none';
+            resultsSection.style.display = 'block';
+            analyzeBtn.disabled = false;
+
+            // Dati simulati
+            plantName.textContent = "Monstera Deliciosa";
+            plantDiagnosis.textContent = "Ingiallimento fogliare dovuto a possibile eccesso di irrigazione e marciume radicale incipiente.";
+            plantRemedies.textContent = "1. Sospendere le irrigazioni fino a completa asciugatura del terriccio. 2. Verificare il drenaggio del vaso. 3. Se il problema persiste, rinvasare rimuovendo le radici compromesse.";
+            
+        }, 2500); // Simula 2.5 secondi di elaborazione
+    });
+</script>
+
+</body>
+</html>
