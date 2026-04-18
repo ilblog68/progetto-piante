@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Citazioni dal Cinema | Condividi le frasi più belle</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #0b0c1a 0%, #1a1f2e 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+
+    /* card principale */
+    .cinema-card {
+      max-width: 920px;
+      width: 100%;
+      background: rgba(20, 22, 36, 0.75);
+      backdrop-filter: blur(14px);
+      border-radius: 3rem;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      padding: 2rem 1.8rem 2.5rem;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 550px) {
+      .cinema-card {
+        padding: 1.5rem 1.2rem 2rem;
+        border-radius: 2rem;
+      }
+    }
+
+    /* header con titolo e effetto cinepresa */
+    .title-section {
+      text-align: center;
+      margin-bottom: 2.2rem;
+    }
+
+    .badge-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 215, 0, 0.15);
+      padding: 0.4rem 1.2rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #f5c542;
+      border: 1px solid rgba(245, 197, 66, 0.4);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFF9E6, #e0cba0);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .sub {
+      color: #9aa1b9;
+      font-size: 1rem;
+      font-weight: 400;
+      border-top: 1px solid rgba(255,255,240,0.15);
+      display: inline-block;
+      padding-top: 0.5rem;
+    }
+
+    /* area citazione principale */
+    .quote-container {
+      background: rgba(10, 12, 24, 0.6);
+      border-radius: 2rem;
+      padding: 2rem 1.8rem;
+      margin: 1.8rem 0 2rem;
+      border: 1px solid rgba(255, 215, 0, 0.25);
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.4);
+      transition: all 0.2s;
+    }
+
+    .quote-text {
+      font-size: 1.8rem;
+      line-height: 1.4;
+      font-weight: 500;
+      color: #F3EFE6;
+      text-align: center;
+      quotes: "“" "”" "‘" "’";
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-text::before {
+      content: "“";
+      font-size: 2.8rem;
+      font-family: serif;
+      color: #f5c542;
+      opacity: 0.7;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .quote-text::after {
+      content: "”";
+      font-size: 2.8rem;
+      font-family: serif;
+      color: #f5c542;
+      opacity: 0.7;
+      margin-left: 4px;
+      vertical-align: bottom;
+    }
+
+    .quote-author {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #D9C991;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-top: 1px dashed rgba(255,215,0,0.3);
+      padding-top: 1.3rem;
+      margin-top: 0.5rem;
+    }
+
+    .film-icon {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    /* pulsanti principali */
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 1.5rem;
+    }
+
+    .btn {
+      border: none;
+      font-family: inherit;
+      font-weight: 600;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(30, 34, 54, 0.9);
+      color: #f0eada;
+      backdrop-filter: blur(4px);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,215,0,0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(105deg, #e6b422, #d4a017);
+      color: #11131f;
+      border: none;
+      box-shadow: 0 6px 14px rgba(212, 160, 23, 0.25);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(105deg, #f0c43a, #e0b020);
+      box-shadow: 0 12px 20px -8px rgba(230, 180, 34, 0.4);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(50, 55, 85, 0.95);
+      transform: translateY(-2px);
+      border-color: rgba(255,215,0,0.5);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    /* pulsanti social */
+    .social-section {
+      margin: 1.2rem 0 0.8rem;
+    }
+
+    .social-title {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #9aa1b9;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .social-title::before, .social-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(255,215,0,0.2);
+      max-width: 80px;
+    }
+
+    .social-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.9rem;
+    }
+
+    .social-btn {
+      background: rgba(25, 28, 45, 0.9);
+      border: none;
+      padding: 0.6rem 1.3rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #e4e0d0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,215,0,0.2);
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(45, 50, 75, 0.95);
+      border-color: rgba(245, 197, 66, 0.6);
+    }
+
+    .social-btn.copy-btn {
+      background: rgba(30, 35, 60, 0.9);
+    }
+
+    .social-btn.copy-btn.copied {
+      background: #2b7a3e;
+      color: white;
+      border-color: #8bc34a;
+    }
+
+    /* toast notifica */
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      background: #1f232ecc;
+      backdrop-filter: blur(12px);
+      color: #f5e2b0;
+      padding: 0.7rem 1.5rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      border: 1px solid #f5c54266;
+      white-space: nowrap;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* contatore e chicca */
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+      color: #7b82a0;
+      gap: 10px;
+    }
+
+    .counter {
+      background: rgba(0,0,0,0.4);
+      padding: 0.3rem 0.9rem;
+      border-radius: 30px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: #55597a;
+      border-top: 1px solid rgba(255,255,240,0.1);
+      padding-top: 1.5rem;
+    }
+
+    @media (max-width: 550px) {
+      .quote-text {
+        font-size: 1.4rem;
+      }
+      .quote-container {
+        padding: 1.5rem 1rem;
+      }
+      .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .social-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* animazione fade */
+    .fade-in {
+      animation: fadeQuote 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    @keyframes fadeQuote {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cinema-card">
+  <div class="title-section">
+    <div class="badge-icon">
+      🎬 CLAPPERBOARD 🎞️
+    </div>
+    <h1>Frasi da Film<br>Indimenticabili</h1>
+    <div class="sub">Le citazioni più iconiche della storia del cinema</div>
+  </div>
+
+  <div class="quote-container" id="quoteContainer">
+    <div class="quote-text" id="quoteText">"Che la forza sia con te"</div>
+    <div class="quote-author">
+      <span class="film-icon">🎥</span>
+      <span id="quoteAuthor">Star Wars (1977) — Han Solo / Obi-Wan</span>
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button class="btn btn-primary" id="newQuoteBtn">
+      🎞️ NUOVA FRASE
+    </button>
+    <button class="btn btn-secondary" id="randomBtn">
+      🎲 CASUALE
+    </button>
+  </div>
+
+  <!-- SEZIONE SOCIAL SHARE -->
+  <div class="social-section">
+    <div class="social-title">Condividi questa citazione</div>
+    <div class="social-buttons">
+      <button class="social-btn" id="shareFacebookBtn">
+        📘 Facebook
+      </button>
+      <button class="social-btn" id="shareTwitterBtn">
+        🐦 X (Twitter)
+      </button>
+      <button class="social-btn" id="shareWhatsAppBtn">
+        💬 WhatsApp
+      </button>
+      <button class="social-btn copy-btn" id="copyQuoteBtn">
+        📋 Copia testo
+      </button>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <div class="counter">
+      📜 <span id="quoteCount">1</span> / <span id="totalCount"></span> citazioni
+    </div>
+    <div class="shuffle-tip">
+      ⭐ "I grandi film non muoiono mai"
+    </div>
+  </div>
+  <footer>
+    🍿 Cinema senza tempo · clicca per rivivere le emozioni · Condividi la magia
+  </footer>
+</div>
+
+<!-- Toast notifica -->
+<div id="toastMessage" class="toast-msg">✨ Testo copiato!</div>
+
+<script>
+  // ----------------------------------------------
+  // DATABASE: LE PIÙ BELLE FRASI DI FILM DI TUTTI I TEMPI
+  // ----------------------------------------------
+  const quotesDatabase = [
+    { text: "Che la forza sia con te.", author: "Star Wars (1977) — Han Solo & Obi-Wan Kenobi" },
+    { text: "Mamma, sempre di corsa! (Run, Forrest, run!)", author: "Forrest Gump (1994) — Forrest Gump / Jenny" },
+    { text: "Sono il re del mondo!", author: "Titanic (1997) — Jack Dawson" },
+    { text: "Io sono tuo padre.", author: "Star Wars: L'Impero colpisce ancora (1980) — Darth Vader" },
+    { text: "Houston, abbiamo un problema.", author: "Apollo 13 (1995) — Jim Lovell" },
+    { text: "Tutti impazziscono prima o poi.", author: "Psycho (1960) — Norman Bates" },
+    { text: "Ti terrò tra le braccia finché non dormirai. Per sempre, e comunque.", author: "La La Land (2016) — Sebastian" },
+    { text: "Sei un bravo ragazzo, Simba, ma devi capire che l’erba del vicino è sempre più verde.", author: "Il Re Leone (1994) — Mufasa" },
+    { text: "Carpe diem. Cogliete l'attimo, ragazzi.", author: "L'Attimo Fuggente (1989) — John Keating" },
+    { text: "Ecco qui: guarderemo le stelle. Tu mi chiederai qualcosa e io ti risponderò.", author: "Nuovo Cinema Paradiso (1988) — Alfredo" },
+    { text: "La vita è come una scatola di cioccolatini: non sai mai quello che ti capita.", author: "Forrest Gump (1994) — Forrest Gump" },
+    { text: "Se costruisci un muro, pensi al domani. Ma se ami qualcuno, pensi all’eternità.", author: "Il Miglio Verde (1999) — Paul Edgecomb" },
+    { text: "Non posso fare a meno di pensare che a volte è meglio perdere che vincere.", author: "Rocky (1976) — Rocky Balboa" },
+    { text: "Sei la mia più grande avventura.", author: "Up (2009) — Carl Fredricksen (rivolto a Ellie)" },
+    { text: "Per quello che è valso... è stato un viaggio fantastico.", author: "Dead Poets Society (1989) — Neil Perry" },
+    { text: "Mi fai venire voglia di essere un uomo migliore.", author: "Qualcosa è cambiato (1997) — Melvin Udall" },
+    { text: "È proprio quando il mare è in burrasca che non bisogna mollare la barra.", author: "Life of Pi (2012) — Piscine Molitor 'Pi' Patel" },
+    { text: "Non siamo mica gangster. Siamo gente che lavora onestamente.", author: "The Irishman (2019) — Frank Sheeran" },
+    { text: "Tutto quello di cui hai bisogno è amore.", author: "Yesterday (2019) — Jack Malik (citazione Beatles)" },
+    { text: "Ognuno muore, ma non tutti hanno veramente vissuto.", author: "Braveheart (1995) — William Wallace" },
+    { text: "Mi chiamo Inigo Montoya. Tu hai ucciso mio padre. Preparati a morire.", author: "La storia fantastica (1987) — Inigo Montoya" },
+    { text: "Beh, nessuno è perfetto.", author: "A qualcuno piace caldo (1959) — Osgood Fielding III" },
+    { text: "Ci vediamo dall’altra parte, amico.", author: "Interstellar (2014) — Cooper" },
+    { text: "Non siamo angeli, ma possiamo salvare qualcuno.", author: "La città della gioia (1992) — Joan Bethel" },
+    { text: "Un sogno che non si avvera è come una mappa senza destinazione.", author: "La La Land (2016) — Mia Dolan" },
+    { text: "Non arrenderti mai. Mai, mai, mai.", author: "The Dark Knight Rises (2012) — Alfred Pennyworth" },
+    { text: "È l’amore che fa girare il mondo.", author: "Il favoloso mondo di Amélie (2001) — Amélie Poulain" },
+    { text: "A volte la vera magia è solo accorgersi delle piccole cose.", author: "Harry Potter e la Pietra Filosofale (2001) — Albus Silente" },
+    { text: "Non puoi cambiare il passato, ma puoi rovinarti il presente rimuginandoci sopra.", author: "Eat Pray Love (2010) — Ketut Liyer" },
+    { text: "La paura è la strada per il lato oscuro. La paura porta all’ira, l’ira all’odio, l’odio alla sofferenza.", author: "Star Wars Ep. I: La Minaccia Fantasma (1999) — Maestro Yoda" },
+    { text: "Domani è un altro giorno.", author: "Via col vento (1939) — Rossella O'Hara" }
+  ];
+
+  // ----------------------------------------------
+  // STATO APP
+  let currentQuoteIndex = 0;
+  const totalQuotes = quotesDatabase.length;
+  let lastIndex = -1;
+
+  // DOM elementi
+  const quoteTextEl = document.getElementById('quoteText');
+  const quoteAuthorEl = document.getElementById('quoteAuthor');
+  const newQuoteBtn = document.getElementById('newQuoteBtn');
+  const randomBtn = document.getElementById('randomBtn');
+  const quoteCountSpan = document.getElementById('quoteCount');
+  const totalCountSpan = document.getElementById('totalCount');
+
+  totalCountSpan.textContent = totalQuotes;
+
+  // toast
+  const toastEl = document.getElementById('toastMessage');
+  let toastTimeout = null;
+
+  function showToast(message, isError = false) {
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastEl.textContent = message || (isError ? "⚠️ Impossibile condividere" : "✨ Testo copiato!");
+    toastEl.classList.add('show');
+    toastTimeout = setTimeout(() => {
+      toastEl.classList.remove('show');
+    }, 2200);
+  }
+
+  // Ottieni la citazione corrente (testo + autore formattato)
+  function getCurrentQuoteObject() {
+    return quotesDatabase[currentQuoteIndex];
+  }
+
+  // Formatta testo per social: "Frase — Film (Autore)"
+  function getFormattedShareText() {
+    const q = getCurrentQuoteObject();
+    // rimuoviamo eventuali doppie virgolette interne se necessario, ma è ok
+    const cleanText = q.text.trim();
+    return `${cleanText} — ${q.author}`;
+  }
+
+  // Aggiornamento UI con animazione
+  function updateQuoteUI(index, withAnimation = true) {
+    if (index < 0 || index >= totalQuotes) index = 0;
+    const quote = quotesDatabase[index];
+    if (!quote) return;
+    
+    const container = document.getElementById('quoteContainer');
+    if (withAnimation) {
+      container.classList.remove('fade-in');
+      void container.offsetWidth;
+      container.classList.add('fade-in');
+    } else {
+      container.classList.add('fade-in');
+    }
+    
+    quoteTextEl.innerHTML = quote.text;
+    quoteAuthorEl.innerHTML = `🎬 ${quote.author}`;
+    currentQuoteIndex = index;
+    quoteCountSpan.textContent = currentQuoteIndex + 1;
+    lastIndex = index;
+  }
+
+  function getRandomDistinctIndex() {
+    if (totalQuotes === 1) return 0;
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * totalQuotes);
+    } while (newIndex === lastIndex);
+    return newIndex;
+  }
+
+  function nextSequentialQuote() {
+    let nextIndex = (currentQuoteIndex + 1) % totalQuotes;
+    updateQuoteUI(nextIndex, true);
+  }
+
+  function randomQuote() {
+    const newIdx = getRandomDistinctIndex();
+    updateQuoteUI(newIdx, true);
+  }
+
+  // ----- CONDIVISIONE SOCIAL -----
+  function shareOnFacebook() {
+    const shareText = getFormattedShareText();
+    const url = encodeURIComponent(window.location.href);
+    const quoteEncoded = encodeURIComponent(shareText);
+    const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quoteEncoded}`;
+    window.open(fbShareUrl, '_blank', 'width=600,height=400');
+  }
+
+  function shareOnTwitter() {
+    const shareText = getFormattedShareText();
+    const via = "cinema_cult";
+    const tweetText = encodeURIComponent(`${shareText} 🎬✨`);
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+    window.open(twitterUrl, '_blank', 'width=600,height=450');
+  }
+
+  function shareOnWhatsApp() {
+    const shareText = getFormattedShareText();
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + " 🎥 Citazione dal cinema")}`;
+    window.open(whatsappUrl, '_blank');
+  }
+
+  async function copyQuoteToClipboard() {
+    const shareText = getFormattedShareText();
+    try {
+      await navigator.clipboard.writeText(shareText);
+      showToast("📋 Citazione copiata negli appunti!");
+      // feedback visivo sul pulsante copia
+      const copyBtn = document.getElementById('copyQuoteBtn');
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.classList.remove('copied');
+      }, 1200);
+    } catch (err) {
+      console.warn("Errore copia: ", err);
+      // fallback
+      const textArea = document.createElement('textarea');
+      textArea.value = shareText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      showToast("📋 Citazione copiata (fallback manuale)");
+      const copyBtn = document.getElementById('copyQuoteBtn');
+      copyBtn.classList.add('copied');
+      setTimeout(() => copyBtn.classList.remove('copied'), 1000);
+    }
+  }
+
+  // Inizializza prima citazione casuale
+  function initFirstQuote() {
+    const randomStart = Math.floor(Math.random() * totalQuotes);
+    lastIndex = -1;
+    updateQuoteUI(randomStart, false);
+    lastIndex = randomStart;
+    currentQuoteIndex = randomStart;
+    quoteCountSpan.textContent = currentQuoteIndex + 1;
+  }
+
+  // Eventi principali
+  newQuoteBtn.addEventListener('click', () => {
+    nextSequentialQuote();
+    if (navigator.vibrate) navigator.vibrate(20);
+  });
+  
+  randomBtn.addEventListener('click', () => {
+    randomQuote();
+    if (navigator.vibrate) navigator.vibrate(15);
+  });
+
+  // social listeners
+  document.getElementById('shareFacebookBtn').addEventListener('click', shareOnFacebook);
+  document.getElementById('shareTwitterBtn').addEventListener('click', shareOnTwitter);
+  document.getElementById('shareWhatsAppBtn').addEventListener('click', shareOnWhatsApp);
+  document.getElementById('copyQuoteBtn').addEventListener('click', copyQuoteToClipboard);
+
+  // Avvio
+  initFirstQuote();
+
+  // Shortcut da tastiera (Space, frecce)
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && document.activeElement?.tagName !== 'BUTTON' && document.activeElement?.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      randomQuote();
+    } else if (e.code === 'ArrowRight') {
+      e.preventDefault();
+      nextSequentialQuote();
+    } else if (e.code === 'ArrowLeft') {
+      e.preventDefault();
+      let prevIndex = (currentQuoteIndex - 1 + totalQuotes) % totalQuotes;
+      updateQuoteUI(prevIndex, true);
+    }
+  });
+
+  // Tooltip breve per suggerire tasti
+  const hintDiv = document.createElement('div');
+  hintDiv.style.position = 'fixed';
+  hintDiv.style.bottom = '12px';
+  hintDiv.style.right = '16px';
+  hintDiv.style.fontSize = '0.65rem';
+  hintDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
+  hintDiv.style.color = '#ccc';
+  hintDiv.style.padding = '4px 10px';
+  hintDiv.style.borderRadius = '30px';
+  hintDiv.style.backdropFilter = 'blur(5px)';
+  hintDiv.style.fontFamily = 'monospace';
+  hintDiv.style.pointerEvents = 'none';
+  hintDiv.innerText = '⌨️ Freccia dx: prossima | Spazio: casuale';
+  document.body.appendChild(hintDiv);
+  setTimeout(() => {
+    hintDiv.style.opacity = '0';
+    hintDiv.style.transition = 'opacity 0.8s';
+    setTimeout(() => { if(hintDiv.remove) hintDiv.remove(); }, 1000);
+  }, 6000);
+</script>
+</body>
+</html>
